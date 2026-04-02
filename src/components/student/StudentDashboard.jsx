@@ -1,22 +1,32 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../App';
 import { MOCK_EXAMS } from '../../mock-data';
-import { PlayCircle, Bot, BookOpen, Clock, Video } from 'lucide-react';
+import { PlayCircle, Bot, BookOpen, Clock, Video, LogOut } from 'lucide-react';
 
 export default function StudentDashboard() {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const navigate = useNavigate();
 
   const upcomingTest = MOCK_EXAMS[0];
 
+  const handleLogout = () => {
+    setUser(null);
+    navigate('/');
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', position: 'relative' }}>
-      <div className="header" style={{ borderBottomRightRadius: '24px', borderBottomLeftRadius: '24px' }}>
-        <h1 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <BookOpen />
-          Dashboard Học Sinh
-        </h1>
-        <p>Hôm nay là một ngày tuyệt vời để học tập!</p>
+      <div className="header" style={{ borderBottomRightRadius: '24px', borderBottomLeftRadius: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div>
+          <h1 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <BookOpen />
+            Dashboard Học Sinh
+          </h1>
+          <p>Hôm nay là một ngày tuyệt vời để học tập!</p>
+        </div>
+        <button onClick={handleLogout} style={{ background: 'rgba(255,255,255,0.2)', borderRadius: '12px', border: 'none', color: 'white', cursor: 'pointer', padding: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }} title="Đăng xuất">
+          <LogOut size={20} />
+        </button>
       </div>
 
       <div className="content animate-fade-in" style={{ paddingBottom: '100px' }}>

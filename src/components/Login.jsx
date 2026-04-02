@@ -12,8 +12,8 @@ export default function Login() {
   const { setUser } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = (roleFilter) => {
-    const user = MOCK_USERS.find(u => u.cccd === userId && u.role === roleFilter);
+  const handleLogin = () => {
+    const user = MOCK_USERS.find(u => u.cccd === userId && u.password === password);
 
     if (user) {
       setUser(user);
@@ -21,7 +21,7 @@ export default function Login() {
       if (user.role === 'TEACHER') navigate('/teacher-dash');
       if (user.role === 'PARENT') navigate('/parent-dash');
     } else {
-      setError('Tài khoản không tồn tại hoặc sai vai trò!');
+      setError('Tài khoản hoặc mật khẩu không đúng!');
     }
   };
 
@@ -38,16 +38,16 @@ export default function Login() {
       <div className="content animate-fade-in" style={{ marginTop: '-20px', position: 'relative', zIndex: 11, background: 'var(--bg-color)', borderRadius: '24px 24px 0 0' }}>
         <div className="card glass">
           <h2 className="card-title text-center" style={{ fontSize: '1.25rem', marginBottom: '4px' }}>Đăng nhập hệ thống</h2>
-          <p className="text-center text-secondary mb-4" style={{ fontSize: '0.85rem' }}>Sử dụng dữ liệu giả lập (Mock Data CCCD)</p>
+          <p className="text-center text-secondary mb-4"></p>
 
           <div className="input-group">
             <label className="input-label" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <User size={16} /> Số CCCD hoặc số điện thoại
+              <User size={16} /> Số CCCD
             </label>
             <input
               type="text"
               className="input-field"
-              placeholder="Ví dụ: 463482 (HS), 111111 (GV)"
+              placeholder="Nhập CCCD"
               value={userId}
               onChange={e => setUserId(e.target.value)}
             />
@@ -60,7 +60,7 @@ export default function Login() {
             <input
               type="password"
               className="input-field"
-              placeholder="Nhập bất kỳ (Mock)"
+              placeholder="Nhập mật khẩu"
               value={password}
               onChange={e => setPassword(e.target.value)}
             />
@@ -69,14 +69,8 @@ export default function Login() {
           {error && <p className="text-red text-center mb-4" style={{ fontSize: '0.9rem' }}>{error}</p>}
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <button className="btn btn-primary" onClick={() => handleLogin('STUDENT')}>
-              Học sinh đăng nhập <ArrowRight size={18} />
-            </button>
-            <button className="btn btn-secondary" onClick={() => handleLogin('TEACHER')}>
-              Giáo viên đăng nhập <ShieldCheck size={18} />
-            </button>
-            <button className="btn btn-secondary" onClick={() => handleLogin('PARENT')}>
-              Phụ huynh đăng nhập <Shield size={18} />
+            <button className="btn btn-primary" onClick={handleLogin}>
+              Đăng nhập <ArrowRight size={18} />
             </button>
           </div>
         </div>
