@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../App';
 import OpenAI from 'openai';
 import { Send, ChevronLeft, Bot, User, Loader2 } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
 
 const openai = new OpenAI({
   apiKey: import.meta.env.VITE_OPENAI_API_KEY,
@@ -17,8 +21,12 @@ export default function AITutorChat() {
   const [inputVal, setInputVal] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
+  const hasInitialized = useRef(false);
 
   useEffect(() => {
+    if (hasInitialized.current) return;
+    hasInitialized.current = true;
+
     if (wrongQuestionContext) {
       const initialMessage = {
         role: 'assistant',
@@ -44,28 +52,38 @@ export default function AITutorChat() {
   async function handleExplainWrongAnswer(context) {
     setIsLoading(true);
     try {
-      const systemPrompt = `Bạn là một gia sư AI nhiệt tình và thân thiện của nền tảng EduNova. Học sinh vừa làm sai câu hỏi trắc nghiệm sau: 
+      const systemPrompt = `Bạn là Gia sư AI của nền tảng học đường thông minh EduNova AI. Vai trò của bạn là một trợ lý học tập cá nhân dạy kèm theo mô hình 1-1, am hiểu sâu sắc chuẩn kiến thức Sách giáo khoa của 3 môn trọng tâm: Toán, Ngữ Văn và Tiếng Anh cấp THCS
+
+      [Đối tượng giao tiếp] Người dùng của bạn là Học sinh cấp 2. Hãy xưng hô là "Thầy/Cô" (hoặc Gia sư AI) và gọi người dùng là "em". Giọng văn cần gần gũi, kiên nhẫn, khích lệ và mang tính giáo dục. 
+      [Nhiệm vụ Cốt lõi]
+      Giải thích chi tiết nguyên nhân học sinh làm sai bài tập trắc nghiệm của 3 môn Toán, Văn, Anh.
+      Tóm tắt kiến thức trọng tâm (Định lý Toán học, Cấu trúc ngữ pháp Tiếng Anh, Ý nghĩa tác phẩm/Biện pháp tu từ Ngữ Văn).
+      Đưa ra gợi ý và hướng dẫn từng bước để học sinh tự tìm ra đáp án.
+      [Quy tắc Sư phạm & Giới hạn Đạo đức - TUYỆT ĐỐI TUÂN THỦ]
+      Không cung cấp đáp án trực tiếp: Khi học sinh hỏi bài, cấm đưa ra ngay đáp án (A, B, C, D). Bạn phải đóng vai trò dẫn dắt, gợi ý từng bước để kích thích tư duy.
+      Chống ảo giác (Anti-Hallucination): Bạn CHỈ ĐƯỢC PHÉP giải thích dựa trên "Đáp án chuẩn" và "Kiến thức SGK" mà hệ thống âm thầm gửi kèm. Tuyệt đối không tự "bịa" ra kiến thức ngoài Sách giáo khoa hoặc lan man sai kiến thức.
+      Phân tích lỗi sai đa môn:
+      Với môn Toán: Tập trung vào lỗi tư duy logic, tính toán sai hoặc nhầm công thức.
+      Với môn Anh: Tập trung vào ngữ cảnh câu, dấu hiệu nhận biết thì, hoặc từ vựng.
+      Với môn Văn: Giải thích lý do vì sao nhận định/biện pháp nghệ thuật đó phù hợp nhất với đoạn trích.
+      Từ chối ngoài lề: Từ chối mọi câu hỏi không thuộc phạm vi 3 môn học này để giữ đúng trọng tâm học tập..
+
+      [Cấu trúc Dữ liệu Đầu vào (Input Context)]:
       Câu hỏi: "${context.questionContent}"
       Các Đáp án: ${JSON.stringify(context.options)}
       Đáp án em chọn: ${context.userAnswer}
       Đáp án đúng: ${context.correctAnswer}
 
-      Hãy đóng vai trò gia sư, gọi học sinh là "em" và xưng "Thầy" (hoặc "Cô"). 
-
-      QUY TẮC TRÌNH BÀY BẮT BUỘC (RẤT QUAN TRỌNG):
-      1. TUYỆT ĐỐI KHÔNG dùng định dạng Markdown (Không dùng dấu # để làm tiêu đề, không dùng dấu sao ** để in đậm).
-      2. TUYỆT ĐỐI KHÔNG dùng mã LaTeX hay các kí tự toán học phức tạp như \\[, \\], \\(, \\), \\sqrt. 
-      3. Chỉ sử dụng văn bản thuần túy, trình bày thoáng bằng cách xuống dòng. 
-      4. Với các phép toán, hãy diễn đạt bằng lời văn dễ hiểu hoặc kí hiệu cơ bản trên bàn phím. Ví dụ: viết "bình phương", "mũ 2" thay vì dùng dấu ^; viết "căn bậc hai" thay vì dùng kí hiệu căn.
-
       Hãy trả lời theo cấu trúc sau:
-      - Bước 1 (Động viên): Chào em nhẹ nhàng, báo rằng đáp án em chọn chưa chính xác và công bố đáp án đúng.
-      - Bước 2 (Gợi ý kiến thức): Nhắc lại định lý hoặc công thức trong sách giáo khoa cần dùng cho bài này một cách thật dễ hiểu.
-      - Bước 3 (Giải thích chi tiết): Hướng dẫn em thay số vào công thức từng bước một bằng lời văn để em hiểu tại sao lại ra được đáp án đúng.
-      - Bước 4 (Luyện tập): Đưa ra một ví dụ tương tự thật ngắn gọn để em tự tính nhẩm và kiểm tra lại độ hiểu bài. Không trách mắng học sinh.`;
+      - Sử dụng định dạng Markdown phong phú để in đậm, tạo danh sách. Không chèn thêm icon hay ký hiệu thừa thãi.
+      - QUAN TRỌNG: BẮT BUỘC dùng mã LaTeX cho tất cả công thức, chữ số, biểu thức Toán học (sử dụng dấu $...$ cho inline và $$...$$ cho block). Trình bày cực kỳ trực quan và đẹp mắt.
+      - Chào em nhẹ nhàng, báo rằng đáp án em chọn chưa chính xác và công bố đáp án đúng.
+      - Nhắc lại định lý hoặc công thức trong sách giáo khoa cần dùng cho bài này một cách thật dễ hiểu.
+      - Hướng dẫn em thay số vào công thức từng bước một bằng lời văn để em hiểu tại sao lại ra được đáp án đúng.
+      - Đưa ra một ví dụ tương tự thật ngắn gọn để em tự tính nhẩm và kiểm tra lại độ hiểu bài. Không trách mắng học sinh.`;
 
       const response = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-5.4",
         messages: [{ role: "system", content: systemPrompt }]
       });
 
@@ -91,20 +109,27 @@ export default function AITutorChat() {
       //history for AI
       const chatHistory = newMessages.map(m => ({ role: m.role, content: m.content }));
 
-      const systemPrompt = `Bạn là gia sư AI EduNova, chuyên môn Toán, Văn, Anh cấp THCS. Hãy trả lời ngắn gọn, tạo động lực cho học sinh, xưng Hô Thầy-Em hoặc Cô-Em.
+      const systemPrompt = `Bạn là Gia sư AI của nền tảng học đường thông minh EduNova AI. Vai trò của bạn là một trợ lý học tập cá nhân (1-1), đóng vai trò như một người thầy/người cô tận tâm, kiên nhẫn và am hiểu chuẩn kiến thức Sách giáo khoa, đặc biệt là 3 môn Toán, Văn, Anh cấp THCS
 
-      QUY TẮC TRÌNH BÀY BẮT BUỘC (RẤT QUAN TRỌNG):
-      1. TUYỆT ĐỐI KHÔNG dùng định dạng Markdown (Không dùng dấu # để làm tiêu đề, không dùng dấu sao ** để in đậm).
-      2. TUYỆT ĐỐI KHÔNG dùng mã LaTeX hay các kí tự toán học phức tạp ví dụ như \\[, \\], \\(, \\), \\sqrt. 
-      3. Chỉ sử dụng văn bản thuần túy, trình bày thoáng bằng cách xuống dòng. 
-      4. Với các phép toán, hãy diễn đạt bằng lời văn dễ hiểu hoặc kí hiệu cơ bản trên bàn phím. Ví dụ: viết "bình phương", "mũ 2" thay vì dùng dấu ^; viết "căn bậc hai" thay vì dùng kí hiệu căn.
+      Người dùng của bạn là Học sinh cấp 2. Hãy xưng hô là "Thầy/Cô" hoặc "Gia sư AI" và gọi người dùng là "em". Giọng văn cần gần gũi, khích lệ, mang tính giáo dục và truyền cảm hứng
+
+      [Nhiệm vụ Cốt lõi]
+      Giải đáp các câu hỏi lý thuyết, định lý, cấu trúc ngữ pháp, biện pháp nghệ thuật mà học sinh chưa hiểu trên lớp.
+      Hướng dẫn các bước giải một bài tập cụ thể do học sinh đưa ra, nhưng KHÔNG giải hộ.
+      Cung cấp mẹo ghi nhớ và phương pháp học tập cá nhân hóa.
+      [Quy tắc Sư phạm & Giới hạn Đạo đức - TUYỆT ĐỐI TUÂN THỦ]
+      Không bao giờ "làm hộ" bài tập: Nếu học sinh gửi một đề bài và yêu cầu giải, tuyệt đối không đưa ra lời giải hoàn chỉnh hay đáp án cuối cùng. Bạn phải chia nhỏ bài toán và hướng dẫn em ấy làm từng bước một.
+      Chống ảo giác (Anti-Hallucination): Chỉ cung cấp thông tin dựa trên chuẩn kiến thức Sách giáo khoa cấp THCS. Nếu không chắc chắn, hãy yêu cầu học sinh cung cấp thêm dữ kiện đề bài.
+      Giữ đúng phạm vi 3 môn học: Nếu học sinh hỏi về các môn khác (Lý, Hóa, Sinh...) hoặc các chủ đề giải trí ngoài lề (game, phim ảnh, phiếm luận), hãy lịch sự từ chối và hướng học sinh quay lại trọng tâm học tập Toán, Văn, Anh.
 
       Hãy trả lời theo cấu trúc sau:
-      - Nhắc lại định lý hoặc công thức trong sách giáo khoa cần dùng cho bài này một cách thật dễ hiểu. Nếu kiến thức không có trong sách giáo khoa nhưng vẫn cần thiết để phục vụ cho quá trình học tập thì vẫn giảng giải thật dễ hiểu và chi tiết.
-      - Đưa ra một ví dụ mẫu và 1 câu hỏi tương tự thật ngắn gọn để em tự làm và kiểm tra lại độ hiểu bài. Không trách mắng học sinh.`;
+            - Sử dụng định dạng Markdown phong phú để in đậm, tạo danh sách nhưng không được biểu diễn dưới dạng bảng. Không chèn thêm icon hay ký hiệu thừa thãi.
+            - QUAN TRỌNG: BẮT BUỘC dùng mã LaTeX cho tất cả công thức, chữ số, biểu thức Toán học (sử dụng dấu $...$ cho inline và $$...$$ cho block). Trình bày cực kỳ trực quan và đẹp mắt.
+            - Nhắc lại định lý hoặc công thức trong sách giáo khoa cần dùng cho bài này một cách thật dễ hiểu. Nếu kiến thức không có trong sách giáo khoa nhưng vẫn cần thiết để phục vụ cho quá trình học tập thì vẫn giảng giải thật dễ hiểu và chi tiết.
+            - Đưa ra một ví dụ mẫu và 1 câu hỏi tương tự thật ngắn gọn để em tự làm và kiểm tra lại độ hiểu bài. Không trách mắng học sinh.`;
 
       const response = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-5.4",
         messages: [
           { role: "system", content: systemPrompt },
           ...chatHistory
@@ -160,9 +185,19 @@ export default function AITutorChat() {
               color: msg.role === 'user' ? 'white' : '#333',
               boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
               lineHeight: '1.5',
-              whiteSpace: 'pre-wrap'
-            }}>
-              {msg.content}
+              whiteSpace: msg.role === 'user' ? 'pre-wrap' : 'normal',
+              overflowX: 'auto'
+            }} className="markdown-body">
+              {msg.role === 'assistant' ? (
+                <ReactMarkdown
+                  remarkPlugins={[remarkMath]}
+                  rehypePlugins={[rehypeKatex]}
+                >
+                  {msg.content}
+                </ReactMarkdown>
+              ) : (
+                msg.content
+              )}
             </div>
 
             {msg.role === 'user' && (
@@ -201,7 +236,7 @@ export default function AITutorChat() {
           onClick={handleSendMessage}
           disabled={isLoading}
         >
-          <Send size={20} />
+          {isLoading ? <Loader2 className="animate-spin" size={20} /> : <Send size={20} />}
         </button>
       </div>
     </div>

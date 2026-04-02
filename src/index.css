@@ -247,6 +247,20 @@ body {
   animation: fadeIn 0.4s ease forwards;
 }
 
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
 /* AI Bubble */
 .ai-bubble {
   background: linear-gradient(135deg, #fce7f3, #e0e7ff);
@@ -324,4 +338,16 @@ body {
   .fab {
     right: 30px;
   }
+}
+
+.markdown-body p:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body p:first-child {
+  margin-top: 0;
+}
+
+.markdown-body {
+  margin-left: 1rem;
 }
