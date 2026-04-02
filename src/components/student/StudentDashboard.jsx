@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../App';
 import { MOCK_EXAMS } from '../../mock-data';
@@ -7,7 +8,8 @@ export default function StudentDashboard() {
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
 
-  const upcomingTest = MOCK_EXAMS[0];
+  const [selectedSubject, setSelectedSubject] = useState('Toán');
+  const upcomingTest = MOCK_EXAMS.find(e => e.subject === selectedSubject) || MOCK_EXAMS[0];
 
   const handleLogout = () => {
     setUser(null);
@@ -48,8 +50,32 @@ export default function StudentDashboard() {
           </button>
         </div>
 
+        {/* Subject Toggles */}
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '12px', marginTop: '24px' }}>
+          {['Toán', 'Văn', 'TA'].map(sub => (
+            <button
+              key={sub}
+              onClick={() => setSelectedSubject(sub)}
+              style={{
+                padding: '6px 16px',
+                borderRadius: '20px',
+                border: 'none',
+                background: selectedSubject === sub ? 'var(--primary)' : '#e2e8f0',
+                color: selectedSubject === sub ? 'white' : '#475569',
+                cursor: 'pointer',
+                fontWeight: '600',
+                fontSize: '0.85rem',
+                transition: 'all 0.2s',
+                flex: 1
+              }}
+            >
+              Môn {sub === 'TA' ? 'Tiếng Anh' : sub}
+            </button>
+          ))}
+        </div>
+
         {/* Exam */}
-        <div className="card glass" style={{ borderLeft: '4px solid var(--primary)', marginTop: '20px' }}>
+        <div className="card glass" style={{ borderLeft: '4px solid var(--primary)' }}>
           <h3 style={{ fontSize: '1.1rem', fontWeight: '600', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--primary)' }}>
             <PlayCircle size={20} />
             Bài kiểm tra cần làm
@@ -60,7 +86,7 @@ export default function StudentDashboard() {
           <p style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
             <Clock size={14} /> Thời gian: {upcomingTest?.duration_minutes} phút
           </p>
-          <button className="btn btn-primary" onClick={() => navigate('/take-test')}>
+          <button className="btn btn-primary" onClick={() => navigate('/take-test', { state: { examId: upcomingTest?.id } })}>
             Làm bài ngay
           </button>
         </div>

@@ -39,7 +39,7 @@ export default function AITutorChat() {
       setMessages([
         {
           role: 'assistant',
-          content: `Chào ${user?.name}! Em cần Thầy/Cô AI hỗ trợ giải thích bài tập, tóm tắt kiến thức hay tìm phương pháp học môn Toán lớp 8 hôm nay nào?`
+          content: `Chào ${user?.name}! Em cần Thầy/Cô AI hỗ trợ giải thích bài tập, tóm tắt kiến thức hay tìm phương pháp học tập cho môn học nào hôm nay?`
         }
       ]);
     }

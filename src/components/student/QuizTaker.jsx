@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../App';
 import { MOCK_EXAMS } from '../../mock-data';
 import { Clock, CheckCircle2, AlertTriangle, ArrowLeft } from 'lucide-react';
@@ -7,17 +7,20 @@ import { Clock, CheckCircle2, AlertTriangle, ArrowLeft } from 'lucide-react';
 export default function QuizTaker() {
   const { user, setCurrentQuiz, setQuizResult } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [exam, setExam] = useState(null);
   const [answers, setAnswers] = useState({});
   const [timeLeft, setTimeLeft] = useState(0);
 
   useEffect(() => {
-    const currentExam = MOCK_EXAMS[0];
+    const passedExamId = location.state?.examId;
+    const currentExam = MOCK_EXAMS.find(e => e.id === passedExamId) || MOCK_EXAMS[0];
+    
     setExam(currentExam);
     setCurrentQuiz(currentExam);
     setTimeLeft(currentExam.duration_minutes * 60);
-  }, [setCurrentQuiz]);
+  }, [setCurrentQuiz, location.state]);
 
   useEffect(() => {
     if (timeLeft <= 0) return;

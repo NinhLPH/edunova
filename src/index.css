@@ -347,7 +347,3 @@ body {
 .markdown-body p:first-child {
   margin-top: 0;
 }
-
-.markdown-body {
-  margin-left: 1rem;
-}
