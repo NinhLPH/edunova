@@ -1,0 +1,72 @@
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../App';
+import { MOCK_EXAMS } from '../../mock-data';
+import { PlayCircle, Bot, BookOpen, Clock, Video } from 'lucide-react';
+
+export default function StudentDashboard() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const upcomingTest = MOCK_EXAMS[0];
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', position: 'relative' }}>
+      <div className="header" style={{ borderBottomRightRadius: '24px', borderBottomLeftRadius: '24px' }}>
+        <h1 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <BookOpen />
+          Dashboard Học Sinh
+        </h1>
+        <p>Hôm nay là một ngày tuyệt vời để học tập!</p>
+      </div>
+
+      <div className="content animate-fade-in" style={{ paddingBottom: '100px' }}>
+        <h2 style={{ fontSize: '1.4rem', fontWeight: 'bold', marginBottom: '20px' }}>
+          Xin chào, <span style={{ color: 'var(--primary)' }}>{user?.name}</span>!
+        </h2>
+
+        {/* Online class */}
+        <div className="card glass" style={{ borderLeft: '4px solid var(--success)', background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)' }}>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: '600', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px', color: '#166534' }}>
+            <Video size={20} />
+            Lớp học trực tuyến sắp tới
+          </h3>
+          <p style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.9rem', marginBottom: '16px', color: '#14532d' }}>
+            <Clock size={16} />Toán lớp 8 - Hình học (14:00 Hôm nay)
+          </p>
+          <button className="btn" style={{ background: 'var(--success)', color: 'white', borderRadius: '12px', padding: '12px', border: 'none' }} onClick={() => alert('Chức năng tham gia Google Meet sẽ ra mắt trong MVP tiếp theo!')}>
+            Tham gia (Google Meet)
+          </button>
+        </div>
+
+        {/* Exam */}
+        <div className="card glass" style={{ borderLeft: '4px solid var(--primary)', marginTop: '20px' }}>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: '600', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--primary)' }}>
+            <PlayCircle size={20} />
+            Bài kiểm tra cần làm
+          </h3>
+          <p style={{ fontSize: '0.9rem', marginBottom: '4px', fontWeight: '500' }}>
+            {upcomingTest?.title}
+          </p>
+          <p style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
+            <Clock size={14} /> Thời gian: {upcomingTest?.duration_minutes} phút
+          </p>
+          <button className="btn btn-primary" onClick={() => navigate('/take-test')}>
+            Làm bài ngay
+          </button>
+        </div>
+
+        {/* Remind */}
+        <div className="card" style={{ marginTop: '20px', background: 'rgba(255,255,255,0.6)' }}>
+          <p className="text-secondary" style={{ fontSize: '0.9rem', textAlign: 'center' }}>
+            Em đã hoàn thành 80% mục tiêu học Toán tuần này. Hãy tiếp tục phát huy! 🚀
+          </p>
+        </div>
+      </div>
+
+      {/* FAB */}
+      <button className="fab" onClick={() => navigate('/ai-tutor')} title="Hỏi Gia sư AI">
+        <Bot size={28} />
+      </button>
+    </div>
+  );
+}

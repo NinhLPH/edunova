@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduNova AI Demo</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: #f4f7f6; color: #333; }
+        .screen { display: none; max-width: 480px; margin: 20px auto; background: #fff; min-height: 800px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; position: relative; }
+        .screen.active { display: block; }
+        .header { background: #4a90e2; color: white; padding: 20px; text-align: center; font-size: 1.2rem; font-weight: bold; }
+        .content { padding: 20px; }
+        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: #4a90e2; color: white; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; text-align: center; }
+        .btn-outline { background: white; color: #4a90e2; border: 2px solid #4a90e2; }
+        .btn:hover { opacity: 0.9; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+        .card { border: 1px solid #eee; border-radius: 10px; padding: 15px; margin-bottom: 15px; background: #fafafa; }
+        
+        /* Chấm điểm */
+        .wrong-answer { color: #d0021b; font-weight: bold; }
+        .correct-answer { color: #28a745; font-weight: bold; }
+        .bubble-ai { position: relative; background: #fff3cd; color: #856404; padding: 10px 15px; border-radius: 15px; border: 1px solid #ffeeba; margin-top: 10px; display: inline-block; font-size: 0.9rem; cursor: pointer; animation: bounce 2s infinite; }
+        .bubble-ai::after { content: ''; position: absolute; bottom: 100%; left: 20px; border-width: 8px; border-style: solid; border-color: transparent transparent #fff3cd transparent; }
+        
+        /* Chat AI */
+        .chat-msg { margin-bottom: 15px; padding: 12px; border-radius: 10px; max-width: 80%; line-height: 1.5; }
+        .chat-ai { background: #e3f2fd; margin-right: auto; }
+        .chat-user { background: #4a90e2; color: white; margin-left: auto; }
+        
+        /* Nav Demo (Chỉ để click qua lại trong bản demo) */
+        .demo-nav { position: fixed; top: 10px; right: 10px; background: #333; color: white; padding: 10px; border-radius: 8px; font-size: 0.8rem; z-index: 1000;}
+        .demo-nav button { margin: 2px; padding: 5px; cursor: pointer; }
+        
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+    </style>
+</head>
+<body>
+
+    <div class="demo-nav">
+        <strong>Chuyển màn hình Demo:</strong><br>
+        <button onclick="nav('login')">Đăng nhập</button>
+        <button onclick="nav('student-dash')">Học sinh</button>
+        <button onclick="nav('teacher-dash')">Giáo viên</button>
+        <button onclick="nav('parent-dash')">Phụ huynh</button>
+        <button onclick="nav('take-test')">Làm bài</button>
+        <button onclick="nav('test-result')">Chấm điểm</button>
+        <button onclick="nav('ai-tutor-explain')">AI Giải thích</button>
+        <button onclick="nav('ai-tutor-general')">AI Trò chuyện</button>
+    </div>
+
+    <div id="login" class="screen active">
+        <div class="header">EduNova AI</div>
+        <div class="content">
+            <h2 style="text-align: center;">Đăng nhập hệ thống</h2>
+            <p style="text-align: center; color: #666; font-size: 0.9rem;">Sử dụng dữ liệu giả lập (Mock Data)</p>
+            <input type="text" placeholder="Số CCCD hoặc số điện thoại">
+            <input type="password" placeholder="Mật khẩu">
+            <button class="btn" onclick="nav('student-dash')">Đăng nhập (Học sinh)</button>
+            <button class="btn btn-outline" onclick="nav('teacher-dash')">Đăng nhập (Giáo viên)</button>
+            <button class="btn btn-outline" onclick="nav('parent-dash')">Đăng nhập (Phụ huynh)</button>
+            <p style="text-align: center; color: #d0021b; display: none;">Tài khoản không tồn tại trong hệ thống.</p>
+        </div>
+    </div>
+
+    <div id="student-dash" class="screen">
+        <div class="header">Dashboard Học Sinh</div>
+        <div class="content">
+            <h3>Xin chào, Hải Ninh!</h3>
+            <div class="card" style="background: #e8f5e9; border-color: #c8e6c9;">
+                <h4>Lớp học trực tuyến sắp tới</h4>
+                <p>Toán lớp 8 - Hình học (14:00 Hôm nay)</p>
+                <button class="btn" style="background: #28a745;">Vào lớp (Google Meet)</button>
+            </div>
+            <div class="card">
+                <h4>Bài kiểm tra cần làm</h4>
+                <p>Kiểm tra 15p: Định lý Pythagore</p>
+                <button class="btn" onclick="nav('take-test')">Làm bài ngay</button>
+            </div>
+            <button class="btn btn-outline" onclick="nav('ai-tutor-general')">Hỏi Gia sư AI</button>
+        </div>
+    </div>
+
+    <div id="teacher-dash" class="screen">
+        <div class="header">Dashboard Giáo Viên</div>
+        <div class="content">
+            <h3>Xin chào, Thầy Nguyễn Văn A</h3>
+            <button class="btn">Tạo bài kiểm tra mới</button> <button class="btn btn-outline">Tạo lịch học Online (Google Meet)</button> <h4 style="margin-top: 20px;">Lớp đang phụ trách (Toán 8A)</h4>
+            <div class="card">
+                <p><strong>Kiểm tra 15p: Định lý Pythagore</strong></p>
+                <p>Đã nộp: 35/40 học sinh</p>
+                <button class="btn" style="padding: 8px;">Xem kết quả lớp</button> </div>
+        </div>
+    </div>
+
+    <div id="parent-dash" class="screen">
+        <div class="header">Sổ Liên Lạc Điện Tử</div>
+        <div class="content">
+            <h3>Danh sách con</h3>
+            <select style="width: 100%; padding: 10px; margin-bottom: 20px;">
+                <option>Lại Phạm Hải Ninh - Lớp 8A</option>
+            </select>
+
+            <div class="card">
+                <h4>Kết quả học tập (Toán 8)</h4>
+                <p>Kiểm tra 15p: <strong>8.0 điểm</strong></p>
+                <div style="width: 100%; height: 100px; background: #eee; text-align: center; line-height: 100px; color: #888; border-radius: 8px;">
+                    [Khu vực hiển thị Biểu đồ điểm số]
+                </div>
+                <p style="margin-top: 10px; font-size: 0.9rem; color: #d0021b;">Số câu sai theo chủ đề: Hình học (2 câu)</p> </div>
+        </div>
+    </div>
+
+    <div id="take-test" class="screen">
+        <div class="header">Bài Kiểm Tra Toán 8</div>
+        <div class="content">
+            <div style="text-align: right; color: #d0021b; font-weight: bold;">Thời gian: 12:45</div>
+            <div class="card">
+                <p><strong>Câu 1:</strong> Cho tam giác ABC vuông tại A, có AB = 3cm, AC = 4cm. Tính độ dài cạnh BC?</p>
+                <div><input type="radio" name="q1"> A. 5cm</div>
+                <div><input type="radio" name="q1"> B. 6cm</div>
+                <div><input type="radio" name="q1"> C. 7cm</div>
+                <div><input type="radio" name="q1"> D. 8cm</div>
+            </div>
+            <button class="btn" onclick="nav('test-result')">Nộp bài</button> 
+        </div>
+    </div>
+
+    <div id="test-result" class="screen">
+        <div class="header">Kết Quả Bài Làm</div>
+        <div class="content">
+            <h2 style="text-align: center; font-size: 3rem; margin: 10px 0; color: #28a745;">8.0</h2>
+            <p style="text-align: center;">Đúng: 8/10 | Sai: 2/10</p>
+            
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+            
+            <h4>Chi tiết bài làm</h4>
+            <div class="card">
+                <p><strong>Câu 3:</strong> Tổng 3 góc trong một tam giác là bao nhiêu?</p>
+                <p class="wrong-answer">Đáp án của bạn: 360 độ (Sai)</p>
+                
+                <div class="bubble-ai" onclick="nav('ai-tutor-explain')">
+                    💡 Bạn cần Gia sư AI trợ giúp giải thích câu này chứ?
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ai-tutor-explain" class="screen">
+        <div class="header" style="background: #6f42c1;">Gia Sư AI - Chữa bài</div>
+        <div class="content">
+            <div class="chat-msg chat-user">
+                Câu 3 em chọn 360 độ tại sao lại sai ạ?
+            </div>
+            <div class="chat-msg chat-ai">
+                <strong>Câu hỏi:</strong> Tổng 3 góc trong một tam giác là bao nhiêu?<br><br>
+                <strong>Đáp án em chọn:</strong> 360 độ <span class="wrong-answer">❌</span><br>
+                <strong>Đáp án đúng:</strong> 180 độ <span class="correct-answer">✅</span><br><br>
+                <strong>Lời giải chi tiết:</strong><br>
+                Định lý tổng 3 góc của một tam giác phát biểu rằng: Tổng số đo ba góc trong của một tam giác bất kỳ luôn luôn bằng 180 độ. Còn 360 độ là tổng các góc của một tứ giác em nhé! Em có muốn làm thử 1 bài tập tương tự để nhớ lâu hơn không?
+            </div>
+            <button class="btn" onclick="nav('test-result')">Quay lại bài kiểm tra</button>
+        </div>
+    </div>
+
+    <div id="ai-tutor-general" class="screen">
+        <div class="header" style="background: #6f42c1;">Trợ Lý Học Tập AI</div>
+        <div class="content" style="height: 600px; display: flex; flex-direction: column;">
+            <div style="flex-grow: 1; overflow-y: auto;">
+                <div class="chat-msg chat-ai">
+                    Chào em! Em cần thầy AI hỗ trợ giải thích bài tập, tóm tắt kiến thức hay tìm phương pháp học môn Toán lớp 8 hôm nay nào? </div>
+                <div class="chat-msg chat-user">
+                    Thầy ơi, giải thích lại giúp em định lý Talet với ạ, em nghe trên lớp chưa hiểu lắm.
+                </div>
+                <div class="chat-msg chat-ai">
+                    Được chứ! Định lý Talet rất quan trọng trong hình học lớp 8. Nói một cách dễ hiểu: Nếu em kẻ một đường thẳng song song với một cạnh của tam giác và cắt hai cạnh còn lại, thì nó sẽ định ra trên hai cạnh đó những đoạn thẳng tương ứng tỉ lệ...
+                </div>
+            </div>
+            <div style="margin-top: 10px; display: flex;">
+                <input type="text" placeholder="Nhập câu hỏi của em..." style="margin: 0; flex-grow: 1; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                <button class="btn" style="margin: 0; width: 80px; border-top-left-radius: 0; border-bottom-left-radius: 0; background: #6f42c1;">Gửi</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Hàm chuyển đổi màn hình đơn giản cho bản demo
+        function nav(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
