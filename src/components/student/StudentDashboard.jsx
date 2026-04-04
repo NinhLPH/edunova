@@ -132,7 +132,7 @@ export default function StudentDashboard() {
                 return (
                   <button
                     key={sub}
-                    onClick={() => navigate('/subject/' + encodeURIComponent(sub))}
+                    onClick={() => navigate('/subject-exams/' + encodeURIComponent(sub))}
                     style={{
                       display: 'flex',
                       flexDirection: 'column',
