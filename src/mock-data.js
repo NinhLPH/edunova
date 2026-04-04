@@ -87,59 +87,6 @@ export const MOCK_EXAMS = [
     ],
   },
   {
-    id: 'exam_math_06',
-    title: 'Kiểm tra số 8-Đơn Thức',
-    subject: 'Toán',
-    duration_minutes: 15,
-    teacher_id: 'gv_1',
-    questions: [
-      {
-        id: 'q_06',
-        content: 'Giá trị của đơn thức 5x4y2z3 tại x=−1;y=−1;z=−2 là',
-        options: { A: '10', B: '20', C: '– 40', D: '40' },
-        correct_answer: 'A',
-        concept: 'Đơn Thức',
-      },
-      {
-        id: 'q_07',
-        content: 'Các đơn thức −10;13x;2x2y;5x2.x2 có bậc lần lượt là',
-        options: { A: '0; 1; 3; 4', B: '0; 3; 1; 4', C: '0; 1; 2; 3', D: '0; 1; 3; 2' },
-        correct_answer: 'B',
-        concept: 'Đơn Thức',
-      },
-    ],
-  },
-  {
-    id: 'exam_math_08',
-    title: 'Kiểm tra số 8-Đa Thức',
-    subject: 'Toán',
-    duration_minutes: 15,
-    teacher_id: 'gv_1',
-    questions: [
-      {
-        id: 'q_08',
-        content: 'Bậc của đa thức x2y5−x2y4+y6+1 là',
-        options: { A: '4', B: '5', C: '6', D: '7' },
-        correct_answer: 'D',
-        concept: 'Đa Thức',
-      },
-      {
-        id: 'q_09',
-        content: 'Bậc của đa thức x2y5−x2y4+y6+1 là',
-        options: { A: '5; 3; 1.', B: '8; 2; –7.', C: '13; 4; – 6; 1.', D: '8; 2; –7; 1.' },
-        correct_answer: 'D',
-        concept: 'Đa Thức',
-      },
-      {
-        id: 'q_10',
-        content: 'Bậc của đa thức x2y5−x2y4+y6+1 là',
-        options: { A: '8', B: '-8', C: '-13', D: '10' },
-        correct_answer: 'B',
-        concept: 'Đa Thức',
-      },
-    ],
-  },
-  {
     id: 'exam_math_11',
     title: 'Kiểm tra Ngữ Văn 8',
     subject: 'Văn',
@@ -261,51 +208,7 @@ export const MOCK_EXAMS = [
         concept: 'Ngữ âm',
       },
     ],
-  },
-  {
-    id: 'exam_math_26',
-    title: 'Kiểm tra TA 8 - Từng vựng',
-    subject: 'TA',
-    duration_minutes: 15,
-    teacher_id: 'gv_2',
-    questions: [
-      {
-        id: 'q_26',
-        content: 'We should not _________ passwords with anyone.',
-        options: { A: 'share', B: 'steal', C: 'sell', D: 'lend' },
-        correct_answer: 'A',
-        concept: 'Từ vựng',
-      },
-      {
-        id: 'q_27',
-        content: 'The facial expressions for happiness, sadness, anger, surprise, fear, and disgust are the same across ____________.',
-        options: { A: 'habits', B: 'languages', C: 'customs', D: 'people' },
-        correct_answer: 'B',
-        concept: 'Từ vựng',
-      },
-      {
-        id: 'q_28',
-        content: 'Luckily, there are many communication techniques to help overcome ___________.',
-        options: { A: 'foreign languages', B: 'foreign languages', C: 'culture shocks', D: 'language differences' },
-        correct_answer: 'B',
-        concept: 'Từ vựng',
-      },
-      {
-        id: 'q_29',
-        content: 'Email and chat rooms help children __________ with friends and family members.',
-        options: { A: 'speak', B: 'talk', C: 'communicate', D: 'say' },
-        correct_answer: 'C',
-        concept: 'Từ vựng',
-      },
-      {
-        id: 'q_30',
-        content: 'They advised ____________a video conference in the next meeting.',
-        options: { A: 'using', B: 'to use', C: 'will use', D: 'use' },
-        correct_answer: 'A',
-        concept: 'Từ vựng',
-      },
-    ],
-  },
+  }
 ];
 
 export const MOCK_RESULTS = [];
