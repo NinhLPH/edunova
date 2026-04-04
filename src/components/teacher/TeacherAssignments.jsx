@@ -37,8 +37,7 @@ export default function TeacherAssignments() {
           D: String(row["Đáp án D"] || "")
         },
         correct_answer: row["Đáp án đúng"],
-        concept: row["Chủ đề"] || "Tổng hợp",
-        explanation: row["Giải thích"] || ""
+        concept: row["Chủ đề"] || "Tổng hợp"
       }));
 
       setPreviewExam({
@@ -76,8 +75,7 @@ export default function TeacherAssignments() {
         "Đáp án C": "6",
         "Đáp án D": "7",
         "Đáp án đúng": "D",
-        "Chủ đề": "Đa Thức",
-        "Giải thích": "Bậc cao nhất là 2+5 = 7"
+        "Chủ đề": "Đa Thức"
       },
       {
         "Câu hỏi": "Thủ đô của Việt Nam là?",
@@ -86,8 +84,7 @@ export default function TeacherAssignments() {
         "Đáp án C": "Đà Nẵng",
         "Đáp án D": "Huế",
         "Đáp án đúng": "B",
-        "Chủ đề": "Tổng hợp",
-        "Giải thích": "Thủ đô của Việt Nam là thủ đô Hà Nội từ năm 1945."
+        "Chủ đề": "Tổng hợp"
       }
     ];
 
@@ -134,9 +131,9 @@ export default function TeacherAssignments() {
           {teacherExams.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {teacherExams.map((exam, idx) => (
-                <div 
-                  key={idx} 
-                  className="card" 
+                <div
+                  key={idx}
+                  className="card"
                   style={{ padding: '16px', background: 'white', borderRadius: '16px', borderLeft: '4px solid var(--primary)', display: 'flex', flexDirection: 'column', cursor: 'pointer' }}
                   onClick={() => setPreviewExam({ ...exam, isExisting: true })}
                 >
