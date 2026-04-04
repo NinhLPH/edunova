@@ -5,6 +5,7 @@ import StudentDashboard from './components/student/StudentDashboard';
 import QuizTaker from './components/student/QuizTaker';
 import QuizResult from './components/student/QuizResult';
 import AITutorChat from './components/student/AITutorChat';
+import SubjectDetail from './components/student/SubjectDetail';
 import TeacherDashboard from './components/teacher/TeacherDashboard';
 import ParentDashboard from './components/parent/ParentDashboard';
 
@@ -33,6 +34,7 @@ function App() {
 
             {/* Student Routes */}
             <Route path="/student-dash" element={user?.role === 'STUDENT' ? <StudentDashboard /> : <Navigate to="/login" />} />
+            <Route path="/subject/:subjectId" element={user?.role === 'STUDENT' ? <SubjectDetail /> : <Navigate to="/login" />} />
             <Route path="/take-test" element={user?.role === 'STUDENT' ? <QuizTaker /> : <Navigate to="/login" />} />
             <Route path="/test-result" element={user?.role === 'STUDENT' ? <QuizResult /> : <Navigate to="/login" />} />
             <Route path="/ai-tutor" element={user?.role === 'STUDENT' ? <AITutorChat /> : <Navigate to="/login" />} />

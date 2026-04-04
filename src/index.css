@@ -44,11 +44,11 @@ body {
 .app-container {
   max-width: 480px;
   margin: 0 auto;
-  min-height: 100vh;
+  height: 100vh;
   position: relative;
   background: white;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
-  overflow-x: hidden;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -56,11 +56,18 @@ body {
 @media (min-width: 768px) {
   .app-container {
     margin: 40px auto;
-    min-height: 800px;
     height: 90vh;
     border-radius: 30px;
-    overflow-y: auto;
+    overflow: hidden;
   }
+}
+
+.page-scroll-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .header {
