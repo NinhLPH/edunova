@@ -25,9 +25,9 @@ export const MOCK_USERS = [
 
   // ==================== GIÁO VIÊN ====================
   // Giáo viên phụ trách đề thi
-  { id: 'gv_1', role: 'TEACHER', name: 'NT Thúy', cccd: '111111', password: '123', subject: 'Toán' },
-  { id: 'gv_2', role: 'TEACHER', name: 'TT.Oanh', cccd: '222222', password: '123', subject: 'TA' },
-  { id: 'gv_3', role: 'TEACHER', name: 'NT.Giang', cccd: '333333', password: '123', subject: 'Văn' },
+  { id: 'gv_1', role: 'TEACHER', name: 'NT Thúy', cccd: '111111', password: '123', subject: 'Toán', classes: ['8B6'] },
+  { id: 'gv_2', role: 'TEACHER', name: 'TT.Oanh', cccd: '222222', password: '123', subject: 'TA', classes: ['8B6'] },
+  { id: 'gv_3', role: 'TEACHER', name: 'NT.Giang', cccd: '333333', password: '123', subject: 'Văn', classes: ['8B6'] },
   // Giáo viên trong danh sách thông tin người dùng
   { id: 'gv_4', role: 'TEACHER', name: 'Nguyễn Phạm N', cccd: '235527', password: '123', subject: 'Toán' },
   { id: 'gv_5', role: 'TEACHER', name: 'Nguyễn Thị Diệu T', cccd: '643553', password: '123', subject: 'Văn' },
@@ -41,6 +41,7 @@ export const MOCK_EXAMS = [
     id: 'exam_math_01',
     title: 'Kiểm tra Hình học 8 - Định lý Pitago',
     subject: 'Toán',
+    assigned_to_class: '8B6',
     duration_minutes: 15,
     teacher_id: 'gv_1',
     questions: [
@@ -90,6 +91,7 @@ export const MOCK_EXAMS = [
     id: 'exam_math_11',
     title: 'Kiểm tra Ngữ Văn 8',
     subject: 'Văn',
+    assigned_to_class: '8B6',
     duration_minutes: 15,
     teacher_id: 'gv_3',
     questions: [

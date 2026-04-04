@@ -8,6 +8,7 @@ import AITutorChat from './components/student/AITutorChat';
 import SubjectDetail from './components/student/SubjectDetail';
 import SubjectExams from './components/student/SubjectExams';
 import TeacherDashboard from './components/teacher/TeacherDashboard';
+import TeacherAssignments from './components/teacher/TeacherAssignments';
 import ParentDashboard from './components/parent/ParentDashboard';
 
 export const AuthContext = createContext();
@@ -43,6 +44,7 @@ function App() {
 
             {/* Teacher Routes */}
             <Route path="/teacher-dash" element={user?.role === 'TEACHER' ? <TeacherDashboard /> : <Navigate to="/login" />} />
+            <Route path="/teacher/assignments" element={user?.role === 'TEACHER' ? <TeacherAssignments /> : <Navigate to="/login" />} />
 
             {/* Parent Routes */}
             <Route path="/parent-dash" element={user?.role === 'PARENT' ? <ParentDashboard /> : <Navigate to="/login" />} />

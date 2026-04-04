@@ -8,24 +8,22 @@ export default function SubjectExams() {
   const { subjectId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
-  
+
   const subName = decodeURIComponent(subjectId);
   const mainColor = colorMap[subName] || 'var(--primary)';
   const IconComponent = iconMap[subName] || PlayCircle;
 
-  // Ideally, filter to get ALL exams for this subject
-  // Right now MOCK_EXAMS only has 1 or 0 for each subject, but we will support multiple.
-  const subjectExams = MOCK_EXAMS.filter(e => e.subject === subName);
+  const subjectExams = MOCK_EXAMS.filter(e => e.subject === subName && (!e.assigned_to_class || e.assigned_to_class === user?.class));
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', position: 'relative', background: 'var(--bg-color)', overflow: 'hidden' }}>
-      
+
       <div className="page-scroll-wrapper">
         {/* Dynamic Header */}
-        <div className="header" style={{ 
-          background: mainColor, 
-          padding: '30px 24px', 
-          borderBottomLeftRadius: '30px', 
+        <div className="header" style={{
+          background: mainColor,
+          padding: '30px 24px',
+          borderBottomLeftRadius: '30px',
           borderBottomRightRadius: '30px',
           color: 'white',
           boxShadow: `0 10px 30px ${mainColor}60`,
@@ -56,9 +54,9 @@ export default function SubjectExams() {
         </div>
 
         <div className="content animate-fade-in" style={{ paddingBottom: '40px', marginTop: '20px' }}>
-          
+
           <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '16px', color: 'var(--text-primary)' }}>Nhiệm vụ của em</h3>
-          
+
           {subjectExams.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {subjectExams.map((exam, idx) => (
@@ -73,8 +71,8 @@ export default function SubjectExams() {
                   <p style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>
                     <Clock size={16} /> Thời gian làm bài: {exam.duration_minutes} phút
                   </p>
-                  <button 
-                    className="btn" 
+                  <button
+                    className="btn"
                     onClick={() => navigate('/take-test', { state: { examId: exam.id } })}
                     style={{ background: mainColor, color: 'white', border: 'none', padding: '14px', borderRadius: '12px', width: '100%', fontWeight: 'bold', fontSize: '1rem', cursor: 'pointer', boxShadow: `0 4px 12px ${mainColor}50` }}
                   >

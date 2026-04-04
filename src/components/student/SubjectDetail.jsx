@@ -13,7 +13,7 @@ export default function SubjectDetail() {
   const mainColor = colorMap[subName] || 'var(--primary)';
   const IconComponent = iconMap[subName] || PlayCircle;
 
-  const upcomingTest = MOCK_EXAMS.find(e => e.subject === subName);
+  const upcomingTests = MOCK_EXAMS.filter(e => e.subject === subName && (!e.assigned_to_class || e.assigned_to_class === user?.class));
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', position: 'relative', background: 'var(--bg-color)' }}>
@@ -83,22 +83,26 @@ export default function SubjectDetail() {
             <PlayCircle size={20} />
             Bài tập / Kiểm tra
           </h3>
-          {upcomingTest ? (
-            <>
-              <p style={{ fontSize: '1rem', marginBottom: '6px', fontWeight: '600', color: 'var(--text-primary)' }}>
-                {upcomingTest.title}
-              </p>
-              <p style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>
-                <Clock size={16} /> Thời gian làm bài: {upcomingTest.duration_minutes} phút
-              </p>
-              <button 
-                className="btn" 
-                onClick={() => navigate('/take-test', { state: { examId: upcomingTest.id } })}
-                style={{ background: mainColor, color: 'white', border: 'none', padding: '14px', borderRadius: '12px', width: '100%', fontWeight: 'bold', fontSize: '1rem', cursor: 'pointer', boxShadow: `0 4px 12px ${mainColor}50` }}
-              >
-                Làm bài ngay
-              </button>
-            </>
+          {upcomingTests.length > 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {upcomingTests.map((test, idx) => (
+                <div key={idx} style={{ borderBottom: idx < upcomingTests.length - 1 ? '1px solid #e2e8f0' : 'none', paddingBottom: idx < upcomingTests.length - 1 ? '16px' : '0' }}>
+                  <p style={{ fontSize: '1rem', marginBottom: '6px', fontWeight: '600', color: 'var(--text-primary)' }}>
+                    {test.title}
+                  </p>
+                  <p style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                    <Clock size={16} /> Thời gian làm bài: {test.duration_minutes} phút
+                  </p>
+                  <button 
+                    className="btn" 
+                    onClick={() => navigate('/take-test', { state: { examId: test.id } })}
+                    style={{ background: mainColor, color: 'white', border: 'none', padding: '12px', borderRadius: '12px', width: '100%', fontWeight: 'bold', fontSize: '0.95rem', cursor: 'pointer', boxShadow: `0 4px 12px ${mainColor}40` }}
+                  >
+                    Làm bài ngay
+                  </button>
+                </div>
+              ))}
+            </div>
           ) : (
             <div style={{ padding: '24px 0', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
               <div style={{ background: '#f1f5f9', padding: '16px', borderRadius: '50%' }}>
